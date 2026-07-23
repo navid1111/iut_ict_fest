@@ -1,0 +1,56 @@
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: deploy/caddy/Dockerfile
+    container_name: iut-ict-fest-proxy
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_started
+      grafana:
+        condition: service_started
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:?Set PUBLIC_HOST in .env}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - observability
+
+  app:
+    restart: unless-stopped
+    ports: !override []
+
+  grafana:
+    restart: unless-stopped
+    ports: !override []
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_SERVER_ROOT_URL: https://${PUBLIC_HOST}/grafana/
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+
+  prometheus:
+    restart: unless-stopped
+    ports: !override []
+
+  loki:
+    restart: unless-stopped
+    ports: !override []
+
+  tempo:
+    restart: unless-stopped
+    ports: !override []
+
+  otel-collector:
+    restart: unless-stopped
+    ports: !override []
+
+volumes:
+  caddy-data:
+  caddy-config:
