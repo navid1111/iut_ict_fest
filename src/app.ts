@@ -1,6 +1,8 @@
 import express, { type Application } from "express";
 import { healthRouter } from "./routes/health.js";
 import { usersRouter } from "./routes/users.js";
+import { bdappsListenerRouter } from "./routes/bdappsListeners.js";
+import { bdappsTestRouter } from "./routes/bdappsTest.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFoundHandler } from "./middleware/notFound.js";
 
@@ -11,6 +13,11 @@ export function createApp(): Application {
 
   app.use("/health", healthRouter);
   app.use("/api/users", usersRouter);
+
+  // BDApps webhooks — register these URLs in provisioning (BDApps -> you).
+  app.use("/bdapps", bdappsListenerRouter);
+  // BDApps test triggers — call from Postman/curl to fire the APIs (you -> BDApps).
+  app.use("/api/bdapps", bdappsTestRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
