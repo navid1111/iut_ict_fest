@@ -1,6 +1,9 @@
 node_modules/
 dist/
+src/generated/
 coverage/
 *.log
 .env
 .DS_Store
+_rendered/
+tempo-data/
