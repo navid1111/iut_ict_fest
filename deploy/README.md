@@ -21,6 +21,30 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 The backend image runs `prisma migrate deploy` before starting Express, so the
 PostgreSQL auth schema is applied automatically on deploy.
 
+## Astareo VPS With Existing Nginx
+
+On `srv1275198`, host Nginx already owns ports `80` and `443`. Use the
+VPS-specific override instead of the bundled Caddy proxy:
+
+```bash
+cd /srv/muqtadir/iut_ict_fest
+cp .env.vps.example .env
+docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.vps-nginx.yml up -d --build
+```
+
+This binds only:
+
+- Backend: `127.0.0.1:8093`
+- Grafana: `127.0.0.1:8094`
+
+Prometheus, Loki, Tempo, OTel Collector, and Postgres stay private on the Docker
+network. A future frontend can use `127.0.0.1:8095`, which was free on
+`srv1275198` during the port check.
+
+Use `deploy/nginx/iut_ict_fest.conf.example` as the host Nginx vhost template
+after replacing `example.astareo.cloud` with the real domain and issuing the TLS
+certificate with Certbot.
+
 ## Public URLs
 
 - Backend: `https://YOUR_DOMAIN/health`

@@ -1,0 +1,28 @@
+services:
+  proxy:
+    profiles:
+      - caddy-proxy
+    ports: !override []
+
+  app:
+    ports: !override
+      - "127.0.0.1:${APP_PORT:-8093}:3000"
+
+  grafana:
+    ports: !override
+      - "127.0.0.1:${GRAFANA_PORT:-8094}:3000"
+
+  prometheus:
+    ports: !override []
+
+  loki:
+    ports: !override []
+
+  tempo:
+    ports: !override []
+
+  otel-collector:
+    ports: !override []
+
+  postgres:
+    ports: !override []
