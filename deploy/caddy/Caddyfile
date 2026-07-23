@@ -9,6 +9,10 @@
 		reverse_proxy app:3000
 	}
 
+	handle /auth/* {
+		reverse_proxy app:3000
+	}
+
 	handle /health {
 		reverse_proxy app:3000
 	}

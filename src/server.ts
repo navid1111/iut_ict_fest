@@ -1,9 +1,14 @@
+import { AuthService } from "./auth/service.js";
+import { getDefaultAuthStore } from "./auth/store.js";
+import { assertProductionConfig } from "./config.js";
 import { startTelemetry, shutdownTelemetry } from "./telemetry.js";
 import { createApp } from "./app.js";
 
 const PORT = Number(process.env.PORT) || 3000;
 
+assertProductionConfig();
 startTelemetry();
+await new AuthService(getDefaultAuthStore()).initialize();
 
 const app = createApp();
 

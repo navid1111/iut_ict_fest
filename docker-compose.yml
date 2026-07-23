@@ -4,15 +4,44 @@ services:
       context: .
     container_name: iut-ict-fest-backend
     depends_on:
+      postgres:
+        condition: service_healthy
       otel-collector:
         condition: service_started
     environment:
       PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iut_ict_fest}:${POSTGRES_PASSWORD:-iut_ict_fest}@postgres:5432/${POSTGRES_DB:-iut_ict_fest}
+      AUTH_TOKEN_SECRET: ${AUTH_TOKEN_SECRET:?Set AUTH_TOKEN_SECRET in .env}
+      AUTH_TOKEN_TTL_SECONDS: ${AUTH_TOKEN_TTL_SECONDS:-3600}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-http://localhost:3000/auth/google/callback}
+      FRONTEND_AUTH_SUCCESS_URL: ${FRONTEND_AUTH_SUCCESS_URL:-}
       OTEL_SERVICE_NAME: iut-ict-fest-backend
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_METRIC_EXPORT_INTERVAL_MS: 5000
     ports:
       - "${APP_PORT:-3000}:3000"
+    networks:
+      - observability
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-iut_ict_fest}
+      POSTGRES_USER: ${POSTGRES_USER:-iut_ict_fest}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-iut_ict_fest}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - observability
 
@@ -102,3 +131,4 @@ networks:
 
 volumes:
   tempo-data:
+  postgres-data:
