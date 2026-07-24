@@ -8,7 +8,7 @@ You already have a BDApps **account**. Now you create an **application** and tur
 
 ## Step 0 — What you'll walk away with
 By the end you'll have:
-- ✅ An `applicationId` (looks like `APP_012345`)
+- ✅ An `applicationId` (looks like `APP_EXAMPLE`)
 - ✅ A `password` (a ~32-character API key)
 - ✅ Services enabled (SMS, USSD, CAAS, Subscription)
 - ✅ Your **listener URLs** registered (so BDApps can call your server)
@@ -92,7 +92,7 @@ Back on the Provisioning app list, find your app card. The **`APP_xxxxxx`** id i
 
 Copy both into `.env`:
 ```
-BDAPPS_APP_ID=APP_012345
+BDAPPS_APP_ID=APP_EXAMPLE
 BDAPPS_PASSWORD=the_long_api_key_here
 ```
 

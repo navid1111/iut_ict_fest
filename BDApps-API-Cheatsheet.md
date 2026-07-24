@@ -14,7 +14,7 @@ There are **two servers**. Every API is one of two directions:
 | **⬅️ IN** | *BDApps* POSTs to **your** listener URL because **something happened** | a user texted you, dialed your USSD |
 
 **Base URL:** `https://developer.bdapps.com`
-**Every OUT request includes:** `applicationId` (e.g. `APP_000027`) + `password` (32-char API key).
+**Every OUT request includes:** `applicationId` (e.g. `APP_EXAMPLE_SMS`) + `password` (32-char API key).
 **Success is always:** `"statusCode": "S1000"`. Anything `E13xx` / `E18xx` = error (see bottom).
 **Phone format:** `tel:8801XXXXXXXXX` (e.g. `01812345678` → `tel:8801812345678`).
 **Privacy:** incoming `sourceAddress` is usually a **masked** id — use that masked id to reply/charge, not a real number.
@@ -56,8 +56,8 @@ There are **two servers**. Every API is one of two directions:
 **Request**
 ```json
 {
-  "applicationId": "APP_000027",
-  "password": "10d8769c825f4aad0c511dfe3de3f121",
+  "applicationId": "APP_EXAMPLE_SMS",
+  "password": "example_bdapps_password",
   "message": "Your OTP is 4821",
   "destinationAddresses": ["tel:8801812345678"]
 }
@@ -93,7 +93,7 @@ There are **two servers**. Every API is one of two directions:
   "message": "STOP",
   "sourceAddress": "tel:8801832160987",
   "requestId": "51307311302350037",
-  "applicationId": "APP_000006",
+  "applicationId": "APP_EXAMPLE_INBOUND",
   "encoding": "0",
   "version": "1.0"
 }
@@ -135,8 +135,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_003117",
-  "password": "18b834673a1eed3913ce72fec6d91df4",
+  "applicationId": "APP_EXAMPLE_USSD",
+  "password": "example_bdapps_password",
   "sessionId": "1330929317043",
   "destinationAddress": "tel:8801812345678",
   "ussdOperation": "mt-cont",
@@ -162,7 +162,7 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
   "ussdOperation": "mo-init",
   "sessionId": "1209992331266121",
   "sourceAddress": "tel:8801812345678",
-  "applicationId": "APP_003117",
+  "applicationId": "APP_EXAMPLE_USSD",
   "requestId": "071308060343170263",
   "encoding": "16",
   "version": "1.0"
@@ -182,8 +182,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_000010",
-  "password": "8f57d2e8de06e6f2d6ee5da6107d0a4f",
+  "applicationId": "APP_EXAMPLE_CAAS",
+  "password": "example_bdapps_password",
   "subscriberId": "tel:8801812345678",
   "paymentInstrumentName": "Mobile Account"
 }
@@ -208,8 +208,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_000010",
-  "password": "8f57d2e8de06e6f2d6ee5da6107d0a4f",
+  "applicationId": "APP_EXAMPLE_CAAS",
+  "password": "example_bdapps_password",
   "subscriberId": "tel:8801812345678",
   "type": "all"
 }
@@ -232,8 +232,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_000010",
-  "password": "8f57d2e8de06e6f2d6ee5da6107d0a4f",
+  "applicationId": "APP_EXAMPLE_CAAS",
+  "password": "example_bdapps_password",
   "subscriberId": "tel:8801812345678",
   "paymentInstrumentName": "Mobile Account",
   "amount": "5",
@@ -263,8 +263,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_000375",
-  "password": "a07118cda5215fc6d01db5b2ab848edd",
+  "applicationId": "APP_EXAMPLE_OTP",
+  "password": "example_bdapps_password",
   "subscriberId": "tel:8801800080103",
   "applicationHash": "abcdefgh",
   "applicationMetaData": {
@@ -289,8 +289,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_000375",
-  "password": "a07118cda5215fc6d01db5b2ab848edd",
+  "applicationId": "APP_EXAMPLE_OTP",
+  "password": "example_bdapps_password",
   "referenceNo": "213561321321613",
   "otp": "123564"
 }
@@ -318,8 +318,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request**
 ```json
 {
-  "applicationId": "APP_000027",
-  "password": "10d8769c825f4aad0c511dfe3de3f121",
+  "applicationId": "APP_EXAMPLE_SMS",
+  "password": "example_bdapps_password",
   "subscriberId": "tel:8801812345678",
   "version": "1.0"
 }
@@ -339,8 +339,8 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 **Request (subscribe)**
 ```json
 {
-  "applicationId": "APP_000027",
-  "password": "10d8769c825f4aad0c511dfe3de3f121",
+  "applicationId": "APP_EXAMPLE_SMS",
+  "password": "example_bdapps_password",
   "subscriberId": "tel:8801812345678",
   "action": "1",
   "version": "1.0"
@@ -358,7 +358,7 @@ USSD is a **live session**. `sessionId` ties the back-and-forth together.
 {
   "status": "REGISTERED",
   "subscriberId": "tel:8801812345678",
-  "applicationId": "APP_000027",
+  "applicationId": "APP_EXAMPLE_SMS",
   "timeStamp": "2026-07-24 09:15:00",
   "frequency": "MONTHLY"
 }

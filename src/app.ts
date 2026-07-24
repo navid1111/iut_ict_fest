@@ -1,6 +1,7 @@
 import express, { type Application } from "express";
 import { healthRouter } from "./routes/health.js";
 import { usersRouter } from "./routes/users.js";
+import { statsRouter } from "./routes/stats.js";
 import { authRouter } from "./routes/auth.js";
 import { bdappsListenerRouter } from "./routes/bdappsListeners.js";
 import { bdappsTestRouter } from "./routes/bdappsTest.js";
@@ -17,6 +18,7 @@ export function createApp(): Application {
   app.use("/health", healthRouter);
   app.use("/auth", authRouter);
   app.use("/api/users", usersRouter);
+  app.use("/api/stats", statsRouter);
 
   // BDApps webhooks — register these URLs in provisioning (BDApps -> you).
   app.use("/bdapps", bdappsListenerRouter);

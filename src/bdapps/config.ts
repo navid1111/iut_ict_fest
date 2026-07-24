@@ -17,7 +17,7 @@ try {
 export interface BdappsConfig {
   /** Base URL of the BDApps API. */
   baseUrl: string;
-  /** Application ID, e.g. "APP_012345". */
+  /** Application ID from the BDApps dashboard, e.g. "APP_EXAMPLE". */
   applicationId: string;
   /** Application password / API key (~32 chars). */
   password: string;

@@ -37,6 +37,10 @@ export interface AuthStore {
   findUserById(id: string): Promise<AuthUser | undefined>;
   createPasswordUser(input: CreatePasswordUserInput): Promise<AuthUser>;
   upsertOAuthUser(input: UpsertOAuthUserInput): Promise<AuthUser>;
+  /** Admin panel: all users, newest first. */
+  listUsers(): Promise<AuthUser[]>;
+  /** Admin panel: remove a user. Resolves false when the id is unknown. */
+  deleteUser(id: string): Promise<boolean>;
   reset?(): Promise<void>;
   close?(): Promise<void>;
 }
@@ -111,6 +115,24 @@ export class InMemoryAuthStore implements AuthStore {
     this.users.set(user.id, user);
     this.identities.set(identityKey, user.id);
     return user;
+  }
+
+  async listUsers(): Promise<AuthUser[]> {
+    return [...this.users.values()].sort((a, b) =>
+      b.createdAt.localeCompare(a.createdAt),
+    );
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    if (!this.users.delete(id)) {
+      return false;
+    }
+    for (const [key, userId] of this.identities) {
+      if (userId === id) {
+        this.identities.delete(key);
+      }
+    }
+    return true;
   }
 
   async reset(): Promise<void> {
@@ -216,6 +238,25 @@ export class PostgresAuthStore implements AuthStore {
     });
   }
 
+  async listUsers(): Promise<AuthUser[]> {
+    const users = await this.prisma.appUser.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return users.map(mapUser);
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    try {
+      await this.prisma.appUser.delete({ where: { id } });
+      return true;
+    } catch (error) {
+      if (isNotFound(error)) {
+        return false;
+      }
+      throw error;
+    }
+  }
+
   async close(): Promise<void> {
     await this.prisma.$disconnect();
   }
@@ -235,6 +276,10 @@ function mapUser(row: PrismaAppUser): AuthUser {
 
 function isUniqueViolation(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+}
+
+function isNotFound(error: unknown): boolean {
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025";
 }
 
 let defaultAuthStore: AuthStore | undefined;
