@@ -15,7 +15,8 @@
     "db:generate": "prisma generate",
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "bdapps": "tsx src/bdapps/cli.ts"
   },
   "dependencies": {
     "@opentelemetry/api-logs": "^0.221.0",
